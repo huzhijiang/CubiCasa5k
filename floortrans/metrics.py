@@ -123,8 +123,13 @@ def polygons_to_tensor(polygons_val, types_val, room_polygons_val, room_types_va
             d = split[0]
         else:
             d = 0
-        jj, ii = draw.polygon(polygons_val[i][:, 1], polygons_val[i][:, 0])
+        
+        # jj, ii = draw.polygon(polygons_val[i][:, 1], polygons_val[i][:, 0])
+        # huzhj: Limit polygon inside image, otherwise see below error.
+        jj, ii = draw.polygon(polygons_val[i][:, 1], polygons_val[i][:, 0], shape=ten[pol_type['class'] + d].shape)
         ten[pol_type['class'] + d][jj, ii] = 1
+        #                         ^^^^^^^^
+        # IndexError: index 521 is out of bounds for axis 0 with size 521
 
     return ten
 
