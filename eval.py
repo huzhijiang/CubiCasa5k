@@ -42,7 +42,7 @@ def print_res(name, res, cls_names, logger):
 
 def evaluate(args, log_dir, writer, logger):
 
-    normal_set = FloorplanSVG(args.data_path, 'test.txt', format='lmdb', lmdb_folder='cubi_lmdb/', augmentations=Compose([DictToTensor()]))
+    normal_set = FloorplanSVG(args.data_path, 'test.txt', format='txt', lmdb_folder='cubi_lmdb/', augmentations=Compose([DictToTensor()])) # TODO: Make format an argument
     data_loader = data.DataLoader(normal_set, batch_size=1, num_workers=0)
 
     checkpoint = torch.load(args.weights)
@@ -81,7 +81,7 @@ def evaluate(args, log_dir, writer, logger):
 
 
 if __name__ == '__main__':
-    time_stamp = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+    time_stamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") # No colon (:) in path, for Windows
     parser = argparse.ArgumentParser(description='Settings for evaluation')
     parser.add_argument('--arch', nargs='?', type=str, default='hg_furukawa_original',
                         help='Architecture to use [\'hg_furukawa_original, segnet etc\']')

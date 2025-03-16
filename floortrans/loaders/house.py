@@ -387,7 +387,13 @@ class House:
         self.icon_areas = []
 
         for e in svg.getElementsByTagName('g'):
-            try: 
+            try:
+
+                if wall_id >= 256:
+                    print("huzhj debug out of uint8 range")
+                    print(path)
+                    break
+
                 if e.getAttribute("id") == "Wall":
                     wall = PolygonWall(e, wall_id, shape)
                     wall.rr, wall.cc = self._clip_outside(wall.rr, wall.cc)
@@ -562,6 +568,9 @@ class House:
                                 # room_name = "Stairs"
                                 # # room_name = room_name_map[room_name]
                                 # self.representation['labels'].append([center_box, [room_name, 1, 1]])
+        if len(self.wall_objs) == 0:
+            print("huzhj debug no wall")
+            print(path)
 
         self.avg_wall_width = self.get_avg_wall_width()
 
@@ -949,8 +958,13 @@ class House:
         res = 0
         for i, w in enumerate(self.wall_objs):
             res += w.max_width
-        res = res / float(i)
 
+        if i == 0:
+            # huzhj: no wall_objs
+
+            return 0
+
+        res = res / float(i)
         return res
 
     def connect_walls(self, walls):

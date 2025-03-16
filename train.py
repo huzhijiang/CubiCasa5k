@@ -52,9 +52,9 @@ def train(args, log_dir, writer, logger):
     # Setup Dataloader
     writer.add_text('parameters', str(vars(args)))
     logging.info('Loading data...')
-    train_set = FloorplanSVG(args.data_path, 'train.txt', format='lmdb',
+    train_set = FloorplanSVG(args.data_path, 'train.txt', format='txt',
                              augmentations=aug)
-    val_set = FloorplanSVG(args.data_path, 'val.txt', format='lmdb',
+    val_set = FloorplanSVG(args.data_path, 'val.txt', format='txt',
                            augmentations=DictToTensor())
 
     if args.debug:
@@ -71,7 +71,7 @@ def train(args, log_dir, writer, logger):
 
     # Setup Model
     logging.info('Loading model...')
-    input_slice = [21, 12, 11]
+    input_slice = [21, 12, 11] # this silce param may be used in loss calculation?
     if args.arch == 'hg_furukawa_original':
         model = get_model(args.arch, 51)
         criterion = UncertaintyLoss(input_slice=input_slice)
@@ -358,7 +358,7 @@ def train(args, log_dir, writer, logger):
 
 
 if __name__ == '__main__':
-    time_stamp = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+    time_stamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") # No colon (:) in path, for Windows
     parser = argparse.ArgumentParser(description='Hyperparameters')
     parser.add_argument('--arch', nargs='?', type=str, default='hg_furukawa_original',
                         help='Architecture to use.')
@@ -367,7 +367,7 @@ if __name__ == '__main__':
     parser.add_argument('--data-path', nargs='?', type=str, default='data/cubicasa5k/',
                         help='Path to data directory')
     parser.add_argument('--n-classes', nargs='?', type=int, default=44,
-                        help='# of the epochs')
+                        help='# of the final classes')
     parser.add_argument('--n-epoch', nargs='?', type=int, default=1000,
                         help='# of the epochs')
     parser.add_argument('--batch-size', nargs='?', type=int, default=26,

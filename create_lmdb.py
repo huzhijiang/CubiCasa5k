@@ -11,7 +11,7 @@ from floortrans.loaders.svg_loader import FloorplanSVG
 
 def main(args, logger):
     logger.info("Opening database...")
-    env = lmdb.open(args.lmdb, map_size=int(200e9))
+    env = lmdb.open(args.lmdb, map_size=int(150e9)) # original is 200GB
 
     logger.info("Creating data loader...")
     data = FloorplanSVG(args.data_path, args.txt, format='txt', original_size=True)
@@ -39,7 +39,7 @@ def main(args, logger):
 
 
 if __name__ == '__main__':
-    time_stamp = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+    time_stamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") # No colon (:) in path, for Windows
     parser = argparse.ArgumentParser(description='Script for creating lmdb database.')
     parser.add_argument('--txt', nargs='?', type=str, default='', required=True,
                         help='Path to text file containing file paths')
