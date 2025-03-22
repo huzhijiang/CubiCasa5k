@@ -60,13 +60,14 @@ class FloorplanSVG(Dataset):
         # Combining them to one numpy tensor
         label = torch.tensor(house.get_segmentation_tensor().astype(np.float32))
         heatmaps = house.get_heatmap_dict()
+
         coef_width = 1
         if self.original_size:
             fplan = cv2.imread(self.data_folder + self.folders[index] + self.org_image_file_name)
             fplan = cv2.cvtColor(fplan, cv2.COLOR_BGR2RGB)  # correct color channels
             height_org, width_org, nchannel = fplan.shape
             fplan = np.moveaxis(fplan, -1, 0)
-            label = label.unsqueeze(0)
+            label = label.unsqueeze(0) # 在第 0 维度增加一个维度
             label = torch.nn.functional.interpolate(label,
                                                     size=(height_org, width_org),
                                                     mode='nearest')
