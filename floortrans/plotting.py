@@ -664,7 +664,7 @@ def polygons_to_image(polygons, types, room_polygons, room_types, height, width)
         pol_room_seg[mask] = room_types[i]['class']
 
     for i, pol in enumerate(polygons):
-        jj, ii = draw.polygon(pol[:, 1], pol[:, 0])
+        jj, ii = draw.polygon(pol[:, 1], pol[:, 0]) # pol[:, 1] means all ys, pol[:, 0] means all xs.
         if types[i]['type'] == 'wall':
             pol_room_seg[jj, ii] = types[i]['class']
         else:
